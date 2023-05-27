@@ -1,5 +1,5 @@
 from pytube import YouTube
-#from tqdm import tqdm
+from tqdm import tqdm
 import os
 
 def EnterWait():
@@ -26,10 +26,15 @@ def CompruebaLink(ruta, LinkValido):
 def EnterWait():
     input("Presiona Enter para continuar...")
 
-#def progress_callback(stream, chunk, bytes_remaining):
-#   bytes_descargados = total_size - bytes_remaining
-#   progreso = bytes_descargados / total_size * 100
-#   pbar.update(progreso - pbar.n)
+def download_video(url, output_path):
+    yt = YouTube(link)
+    video = yt.streams.get_highest_resolution()
+    total_size = video.filesize
+    nombre_archivo = yt.title + ".mp4"
+
+    with tqdm(total=total_size, unit='B', unit_scale=True, desc='Descargando video') as pbar:
+        video.download(Ruta, filename=nombre_archivo)
+        pbar.update(total_size)
 
 
 
@@ -49,21 +54,7 @@ while not LinkValido[0]:
     CompruebaRuta(Ruta, LinkValido)
 
 try:
-    yt = YouTube(link)
-    print(yt.title)
-    stream = yt.streams.get_highest_resolution()
-    total_size = stream.filesize
-    nombre_archivo = yt.title + ".mp4"
-
-    #with tqdm(total=total_size, unit='B', unit_scale=True) as pbar:
-#            with open(ruta + nombre_archivo, 'wb') as file:
-#            for chunk in stream.iter_content(chunk_size=1024):
-#                if chunk:
- #                   file.write(chunk)
-#                    pbar.update(len(chunk))
-
-
-    stream.download(Ruta)
+    download_video(link, Ruta)
 except Exception as ex:
     print(ex)
     EnterWait()
